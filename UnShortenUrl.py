@@ -8,10 +8,10 @@ TIMEOUT = 10
 class UnShortenUrl:
     def process(self, url, previous_url=None):
         logging.info('Init url: %s'%url)
-        import urlparse
+        from urllib.parse import urlparse
         import httplib
         try:
-            parsed = urlparse.urlparse(url)
+            parsed = urlparse(url)
             if parsed.scheme == 'https':
                 h = httplib.HTTPSConnection(parsed.netloc, timeout=TIMEOUT)
             else:
@@ -35,8 +35,8 @@ class UnShortenUrl:
                 red_url = response.getheader('Location')
                 if red_url.startswith('/'):
                     logging.info('Adding scheme and netloc to the red url')
-                    import urlparse
-                    parsed_prev_url = urlparse.urlparse(previous_url)
+                    from urllib.parse import urlparse
+                    parsed_prev_url = urlparse(previous_url)
                     red_url = '%s://%s%s'%(parsed_prev_url.scheme, parsed_prev_url.netloc, red_url)
                 logging.info('Red, previous: %s, %s'%(red_url, previous_url))
                 if red_url == previous_url:
